@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Birthday Puzzle Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Times New Roman', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    #startScreen, #questionScreen, #message {
+      display: none;
+    }
+
+    #startScreen.active,
+    #questionScreen.active,
+    #message.active {
+      display: block;
+    }
+
+    #startScreen input, #startScreen button, #questionScreen button {
+      padding: 10px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 8px;
+      font-family: 'Times New Roman', serif;
+      color: deeppink;
+    }
+
+    #questionScreen {
+      text-align: center;
+    }
+
+    #question {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: pink;
+      background-color: rgba(0,0,0,0.6);
+      padding: 10px;
+      border-radius: 10px;
+      font-family: 'Times New Roman', serif;
+    }
+
+    .option {
+      display: block;
+      padding: 10px 20px;
+      margin: 10px auto;
+      background-color: #ff66b2;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 250px;
+      font-family: 'Times New Roman', serif;
+    }
+
+    #message {
+      font-size: 24px;
+      color: pink;
+      text-align: center;
+      max-width: 90%;
+      background-color: rgba(0,0,0,0.7);
+      padding: 20px;
+      border-radius: 15px;
+      font-family: 'Times New Roman', serif;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="startScreen" class="active">
+    <h2 style="color:pink; text-shadow:1px 1px 2px black; font-family:'Times New Roman', serif;">Apna Naam Likho:</h2>
+    <input type="text" id="userNameInput" placeholder="Apka Naam" />
+    <button onclick="startQuiz()">Start</button>
+  </div>
+
+  <div id="questionScreen">
+    <div id="question"></div>
+    <div id="options"></div>
+  </div>
+
+  <div id="message"></div>
+
+  <script>
+    const questions = [
+      {
+        question: "Subha uth kar sabse pehli cheez kya yaad aati hai?",
+        options: ["School ka dard", "Phone ka charger", "Alarm band karna", "Chai!"],
+        answer: "Alarm band karna"
+      },
+      {
+        question: "Anday fridge mein rakhnay chahiye ya nahi?",
+        options: ["Nahi, shelf pe sahi hain", "Haan fridge mein", "Microwave mein?", "Freezer mein"],
+        answer: "Haan fridge mein"
+      },
+      {
+        question: "Jab tum haste ho to kya hota hai?",
+        options: ["Bijli chali jati hai", "Dost haste hain", "Camera on hota hai", "Mood set ho jata hai"],
+        answer: "Mood set ho jata hai"
+      },
+      {
+        question: "Agar ice cream gir jaye to?",
+        options: ["Zameen ka maza le", "Rona aa jaye", "Dusri le lein", "Drama shuru"],
+        answer: "Dusri le lein"
+      },
+      {
+        question: "Chawal ko english mein kya kehte hain?",
+        options: ["Wheat", "Corn", "Rice", "Maggie"],
+        answer: "Rice"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let userName = "";
+
+    function startQuiz() {
+      const input = document.getElementById("userNameInput").value.trim();
+      if (input === "") {
+        alert("Naam likhna zaroori hai!");
+        return;
+      }
+
+      userName = input;
+      document.getElementById("startScreen").classList.remove("active");
+      document.getElementById("questionScreen").classList.add("active");
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = q.question;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const correct = questions[currentQuestion].answer;
+      if (selected === correct) {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          endGame();
+        }
+      } else {
+        alert(`Galat jawab! Sahi jawab tha: ${correct}`);
+      }
+    }
+
+    function endGame() {
+      document.getElementById("questionScreen").classList.remove("active");
+      const msg = document.getElementById("message");
+      msg.innerHTML = `🎂 Happy Birthday My dear cousin <strong>${userName}</strong>, Allah ap ko hamesha Khush rakhy or asey hi Hasti raho or hasati raho means a lot ❤️. <br><br><em>and that really means... or jawab dey diya karo time say  💖</em>`;
+      msg.classList.add("active");
+    }
+  </script>
+
+</body>
+</html>
